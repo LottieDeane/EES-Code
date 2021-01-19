@@ -9,16 +9,11 @@ i2c = busio.I2C(board.SCL, board.SDA)
 
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1115(i2c)
-# you can specify an I2C adress instead of the default 0x48
-#ads = ADS.ADS1115(i2c, address=0x48)
 
-# Create single-ended input on channel 0
+#created singe ended inputs on channels 0, 1, 2 for each sensor
 sensor0 = AnalogIn(ads, ADS.P0)
 sensor1 = AnalogIn(ads, ADS.P1)
 sensor2 = AnalogIn(ads, ADS.P2)
-
-# Create differential input between channel 0 and 1
-# chan = AnalogIn(ads, ADS.P0, ADS.P1)
 
 print("{:>5}\t{:>5}".format("raw", "v"))
 
