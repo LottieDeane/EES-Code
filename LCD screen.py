@@ -16,8 +16,6 @@ from adafruit_ads1x15.analog_in import AnalogIn
 #pm sensor
 from pms5003 import PMS5003, ReadTimeoutError
 
-MESSAGE = "Hello World! How are you today?"
-
 # Create ST7735 LCD display class.
 disp = ST7789.ST7789(
     port=0,
@@ -28,27 +26,16 @@ disp = ST7789.ST7789(
     spi_speed_hz=10000000
 )
 
-pms5003 = PMS5003()
-
 # Initialize display.
 disp.begin()
 
 WIDTH = disp.width
 HEIGHT = disp.height
 
-
 img = Image.new('RGB', (WIDTH, HEIGHT), color=(0, 0, 0))
-
 draw = ImageDraw.Draw(img)
-
 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)
-
 size_x, size_y = draw.textsize(MESSAGE, font)
-
-text_x = 0
-text_y = 0
-
-t_start = time.time()
 
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -56,12 +43,13 @@ i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1115(i2c)
 
+#creates the PM sensor object
+pms5003 = PMS5003()
+
 #created singe ended inputs on channels 0, 1, 2 for each sensor
 sensor0 = AnalogIn(ads, ADS.P0)
 sensor1 = AnalogIn(ads, ADS.P1)
 sensor2 = AnalogIn(ads, ADS.P2)
-
-print("{:>5}\t{:>5}".format("raw", "v"))
 
 while True:
     Data = ["Carbon Dioxide","Value: "+str(sensor0.value),"Gas Levels:","Value: "+str(sensor1.value),"Ozone:","Value: "+str(sensor2.value)] 
