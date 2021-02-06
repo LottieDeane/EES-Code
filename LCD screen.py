@@ -67,7 +67,7 @@ while True:
     draw.rectangle((0,0, 200, 240), (0, 0, 0))
     
     for i in range(0,len(Data)):
-        #draw.text((text_x, text_y+i*20), Data[i], font=font, fill=(255, 255, 255))
+        draw.text((text_x, text_y+i*20), Data[i], font=font, fill=(255, 255, 255))
         print(Data[i])
     disp.display(img)
     time.sleep(0.2)
