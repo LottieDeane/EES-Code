@@ -1,18 +1,28 @@
-import Adafruit_DHT
+import time
+import board
+import adafruit_dht
+
+dhtDevice = adafruit_dht.DHT11(board.D17, use_pulseio=False)
  
-# Set sensor type : Options are DHT11,DHT22 or AM2302
-sensor=Adafruit_DHT.DHT11
+while True:
+    try:
+        # Print the values to the serial port
+        temperature_c = dhtDevice.temperature
+        temperature_f = temperature_c * (9 / 5) + 32
+        humidity = dhtDevice.humidity
+        print(
+            "Temp: {:.1f} F / {:.1f} C    Humidity: {}% ".format(
+                temperature_f, temperature_c, humidity
+            )
+        )
  
-# Set GPIO sensor is connected to
-gpio=17
+    except RuntimeError as error:
+        # Errors happen fairly often, DHT's are hard to read, just keep going
+        print(error.args[0])
+        time.sleep(2.0)
+        continue
+    except Exception as error:
+        dhtDevice.exit()
+        raise error
  
-# Use read_retry method. This will retry up to 15 times to
-# get a sensor reading (waiting 2 seconds between each retry).
-humidity, temperature = Adafruit_DHT.read_retry(sensor, gpio)
- 
-# Reading the DHT11 is very sensitive to timings and occasionally
-# the Pi might fail to get a valid reading. So check if readings are valid.
-if humidity is not None and temperature is not None:
-  print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
-else:
-  print('Failed to get reading. Try again!')
+    time.sleep(2.0)
